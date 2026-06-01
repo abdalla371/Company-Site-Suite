@@ -4,26 +4,27 @@ import tailwindcss from "@tailwindcss/vite";
 import path from "path";
 import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 
-const rawPort = process.env.PORT;
+const isGitHubPages = process.env.GITHUB_PAGES === "true";
 
-if (!rawPort) {
-  throw new Error(
-    "PORT environment variable is required but was not provided.",
-  );
-}
+let port = 3000;
+let basePath = "/";
 
-const port = Number(rawPort);
-
-if (Number.isNaN(port) || port <= 0) {
-  throw new Error(`Invalid PORT value: "${rawPort}"`);
-}
-
-const basePath = process.env.BASE_PATH;
-
-if (!basePath) {
-  throw new Error(
-    "BASE_PATH environment variable is required but was not provided.",
-  );
+if (!isGitHubPages) {
+  const rawPort = process.env.PORT;
+  if (!rawPort) {
+    throw new Error("PORT environment variable is required but was not provided.");
+  }
+  port = Number(rawPort);
+  if (Number.isNaN(port) || port <= 0) {
+    throw new Error(`Invalid PORT value: "${rawPort}"`);
+  }
+  const bp = process.env.BASE_PATH;
+  if (!bp) {
+    throw new Error("BASE_PATH environment variable is required but was not provided.");
+  }
+  basePath = bp;
+} else {
+  basePath = "/Smart-Employment/";
 }
 
 export default defineConfig({
@@ -31,7 +32,7 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    runtimeErrorOverlay(),
+    ...(!isGitHubPages ? [runtimeErrorOverlay()] : []),
     ...(process.env.NODE_ENV !== "production" &&
     process.env.REPL_ID !== undefined
       ? [

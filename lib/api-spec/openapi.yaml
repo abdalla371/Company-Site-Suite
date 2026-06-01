@@ -1,22 +1,35 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Smart Employment Service API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: auth
+    description: Authentication
+  - name: jobs
+    description: Job listings
+  - name: companies
+    description: Company profiles
+  - name: internship
+    description: Internship applications
+  - name: shaqotag
+    description: Shaqo-tag applications
+  - name: membership
+    description: Membership plans and signups
+  - name: stats
+    description: Dashboard statistics
+
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,13 +37,609 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /auth/register:
+    post:
+      operationId: register
+      tags: [auth]
+      summary: Register new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserRegistration"
+      responses:
+        "201":
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "400":
+          description: Validation error
+
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Login user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserLogin"
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Invalid credentials
+
+  /auth/logout:
+    post:
+      operationId: logout
+      tags: [auth]
+      summary: Logout user
+      responses:
+        "200":
+          description: Logged out
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /auth/me:
+    get:
+      operationId: getMe
+      tags: [auth]
+      summary: Get current user profile
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Not authenticated
+
+  /jobs:
+    get:
+      operationId: listJobs
+      tags: [jobs]
+      summary: List all job postings
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: type
+          in: query
+          schema:
+            type: string
+        - name: location
+          in: query
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: Job listings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Job"
+    post:
+      operationId: createJob
+      tags: [jobs]
+      summary: Post a new job
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/JobInput"
+      responses:
+        "201":
+          description: Job created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Job"
+
+  /jobs/featured:
+    get:
+      operationId: listFeaturedJobs
+      tags: [jobs]
+      summary: Get featured/recent jobs for homepage
+      responses:
+        "200":
+          description: Featured jobs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Job"
+
+  /jobs/{id}:
+    get:
+      operationId: getJob
+      tags: [jobs]
+      summary: Get a single job by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Job detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Job"
+        "404":
+          description: Not found
+
+  /companies:
+    get:
+      operationId: listCompanies
+      tags: [companies]
+      summary: List companies (top hiring)
+      responses:
+        "200":
+          description: Company list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Company"
+
+  /internship-applications:
+    get:
+      operationId: listInternshipApplications
+      tags: [internship]
+      summary: List internship applications
+      responses:
+        "200":
+          description: Internship applications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/InternshipApplication"
+    post:
+      operationId: createInternshipApplication
+      tags: [internship]
+      summary: Submit an internship application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InternshipApplicationInput"
+      responses:
+        "201":
+          description: Application submitted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternshipApplication"
+
+  /shaqotag-applications:
+    get:
+      operationId: listShaqotagApplications
+      tags: [shaqotag]
+      summary: List shaqo-tag applications
+      responses:
+        "200":
+          description: Shaqo-tag applications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ShaqotagApplication"
+    post:
+      operationId: createShaqotagApplication
+      tags: [shaqotag]
+      summary: Submit a shaqo-tag application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ShaqotagApplicationInput"
+      responses:
+        "201":
+          description: Application submitted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ShaqotagApplication"
+
+  /membership-plans:
+    get:
+      operationId: listMembershipPlans
+      tags: [membership]
+      summary: List membership plans
+      responses:
+        "200":
+          description: Membership plans
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MembershipPlan"
+
+  /memberships:
+    post:
+      operationId: createMembership
+      tags: [membership]
+      summary: Sign up for a membership plan
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MembershipInput"
+      responses:
+        "201":
+          description: Membership created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Membership"
+
+  /stats/summary:
+    get:
+      operationId: getSiteSummary
+      tags: [stats]
+      summary: Get homepage stats summary (jobs count, companies, members)
+      responses:
+        "200":
+          description: Site statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SiteSummary"
+
 components:
   schemas:
     HealthStatus:
       type: object
+      required: [status]
       properties:
         status:
           type: string
-      required:
-        - status
 
+    SuccessResponse:
+      type: object
+      required: [success]
+      properties:
+        success:
+          type: boolean
+        message:
+          type: ["string", "null"]
+
+    User:
+      type: object
+      required: [id, fullName, email, role, createdAt]
+      properties:
+        id:
+          type: integer
+        fullName:
+          type: string
+        email:
+          type: string
+        phone:
+          type: ["string", "null"]
+        role:
+          type: string
+          enum: [job_seeker, employer, admin]
+        createdAt:
+          type: string
+
+    AuthResponse:
+      type: object
+      required: [user, token]
+      properties:
+        user:
+          $ref: "#/components/schemas/User"
+        token:
+          type: string
+
+    UserRegistration:
+      type: object
+      required: [fullName, email, password, role]
+      properties:
+        fullName:
+          type: string
+          minLength: 2
+        email:
+          type: string
+        password:
+          type: string
+          minLength: 6
+        phone:
+          type: string
+        role:
+          type: string
+          enum: [job_seeker, employer]
+
+    UserLogin:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+
+    Job:
+      type: object
+      required: [id, title, companyName, location, type, salary, description, category, createdAt]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        companyName:
+          type: string
+        companyLogo:
+          type: ["string", "null"]
+        location:
+          type: string
+        type:
+          type: string
+          enum: [full_time, part_time, contract, internship, remote]
+        salary:
+          type: ["string", "null"]
+        description:
+          type: string
+        category:
+          type: string
+        requirements:
+          type: ["string", "null"]
+        isFeatured:
+          type: boolean
+        createdAt:
+          type: string
+
+    JobInput:
+      type: object
+      required: [title, companyName, location, type, description, category]
+      properties:
+        title:
+          type: string
+        companyName:
+          type: string
+        companyLogo:
+          type: string
+        location:
+          type: string
+        type:
+          type: string
+          enum: [full_time, part_time, contract, internship, remote]
+        salary:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+        requirements:
+          type: string
+        isFeatured:
+          type: boolean
+
+    Company:
+      type: object
+      required: [id, name, openPositions]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        logo:
+          type: ["string", "null"]
+        industry:
+          type: ["string", "null"]
+        location:
+          type: ["string", "null"]
+        openPositions:
+          type: integer
+
+    InternshipApplication:
+      type: object
+      required: [id, fullName, email, university, fieldOfStudy, startDate, status, createdAt]
+      properties:
+        id:
+          type: integer
+        fullName:
+          type: string
+        email:
+          type: string
+        phone:
+          type: ["string", "null"]
+        university:
+          type: string
+        fieldOfStudy:
+          type: string
+        yearOfStudy:
+          type: ["string", "null"]
+        cvUrl:
+          type: ["string", "null"]
+        coverLetter:
+          type: ["string", "null"]
+        startDate:
+          type: string
+        status:
+          type: string
+          enum: [pending, reviewing, accepted, rejected]
+        createdAt:
+          type: string
+
+    InternshipApplicationInput:
+      type: object
+      required: [fullName, email, university, fieldOfStudy, startDate]
+      properties:
+        fullName:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        university:
+          type: string
+        fieldOfStudy:
+          type: string
+        yearOfStudy:
+          type: string
+        cvUrl:
+          type: string
+        coverLetter:
+          type: string
+        startDate:
+          type: string
+
+    ShaqotagApplication:
+      type: object
+      required: [id, fullName, email, occupation, experience, status, createdAt]
+      properties:
+        id:
+          type: integer
+        fullName:
+          type: string
+        email:
+          type: string
+        phone:
+          type: ["string", "null"]
+        occupation:
+          type: string
+        experience:
+          type: string
+        skills:
+          type: ["string", "null"]
+        cvUrl:
+          type: ["string", "null"]
+        coverLetter:
+          type: ["string", "null"]
+        preferredSector:
+          type: ["string", "null"]
+        status:
+          type: string
+          enum: [pending, reviewing, accepted, rejected]
+        createdAt:
+          type: string
+
+    ShaqotagApplicationInput:
+      type: object
+      required: [fullName, email, occupation, experience]
+      properties:
+        fullName:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        occupation:
+          type: string
+        experience:
+          type: string
+        skills:
+          type: string
+        cvUrl:
+          type: string
+        coverLetter:
+          type: string
+        preferredSector:
+          type: string
+
+    MembershipPlan:
+      type: object
+      required: [id, name, price, duration, features]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        price:
+          type: number
+        duration:
+          type: string
+        features:
+          type: array
+          items:
+            type: string
+        isPopular:
+          type: boolean
+
+    Membership:
+      type: object
+      required: [id, planId, fullName, email, phone, status, createdAt]
+      properties:
+        id:
+          type: integer
+        planId:
+          type: integer
+        fullName:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        status:
+          type: string
+        createdAt:
+          type: string
+
+    MembershipInput:
+      type: object
+      required: [planId, fullName, email, phone]
+      properties:
+        planId:
+          type: integer
+        fullName:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+
+    SiteSummary:
+      type: object
+      required: [totalJobs, totalCompanies, totalMembers, totalApplications]
+      properties:
+        totalJobs:
+          type: integer
+        totalCompanies:
+          type: integer
+        totalMembers:
+          type: integer
+        totalApplications:
+          type: integer

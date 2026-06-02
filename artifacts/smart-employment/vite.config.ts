@@ -24,7 +24,7 @@ if (!isGitHubPages) {
   }
   basePath = bp;
 } else {
-  basePath = "/Smart-Employment/";
+  basePath = "/Company-Site-Suite/";
 }
 
 export default defineConfig({

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Detail - Smart Employment Service</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<div id="page-content" style="min-height:80vh">
+  <div class="loading" style="padding-top:80px"><div class="spinner"></div><p>Loading job...</p></div>
+</div>
+<script src="config.js"></script><script src="script.js"></script><script src="integration.js"></script>
+<script>
+renderNavbar('jobs'); renderFooter();
+
+async function loadJob() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  if (!id) { window.location.href = 'jobs.html'; return; }
+  const el = document.getElementById('page-content');
+  try {
+    const j = await jobs.get(id);
+    document.title = `${j.title} - Smart Employment Service`;
+    el.innerHTML = `
+      <div class="page-hero">
+        <div class="page-hero-inner">
+          <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px">
+            <div class="company-logo-box" style="width:60px;height:60px;font-size:22px">${initials(j.companyName)}</div>
+            <div>
+              <h1 style="font-size:28px;margin-bottom:4px">${j.title}</h1>
+              <p style="color:rgba(255,255,255,0.8);font-size:16px">${j.companyName}</p>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <span class="job-tag" style="background:rgba(255,255,255,0.12);color:white;border-radius:100px;padding:6px 14px;font-size:13px">📍 ${j.location}</span>
+            ${typeBadge(j.type)}
+            ${j.salary ? `<span class="job-tag" style="background:rgba(255,255,255,0.12);color:white;border-radius:100px;padding:6px 14px;font-size:13px">💰 ${j.salary}</span>` : ''}
+          </div>
+        </div>
+      </div>
+      <div class="container section-sm">
+        <div style="display:grid;grid-template-columns:2fr 1fr;gap:32px">
+          <div>
+            <div class="info-card">
+              <h3>Job Description</h3>
+              <p style="white-space:pre-wrap">${j.description}</p>
+            </div>
+            ${j.requirements ? `<div class="info-card mt-16"><h3>Requirements</h3><p style="white-space:pre-wrap">${j.requirements}</p></div>` : ''}
+          </div>
+          <div>
+            <div class="info-card" style="background:var(--navy);color:white;border:none">
+              <h3 style="color:var(--gold)">Apply Now</h3>
+              <p style="color:rgba(255,255,255,0.75);font-size:14px;margin-bottom:20px">Submit your application for this position today.</p>
+              ${isLoggedIn()
+                ? `<button class="btn btn-primary" style="width:100%" onclick="applyNow('${j.title}', '${j.companyName}')">Apply for this Job</button>`
+                : `<a href="login.html" class="btn btn-primary" style="width:100%;display:block;text-align:center">Login to Apply</a>`}
+            </div>
+            <div class="info-card mt-16">
+              <h3>Job Info</h3>
+              <table style="width:100%;font-size:14px;color:var(--gray-600)">
+                <tr><td style="padding:6px 0;font-weight:600;color:var(--navy)">Category</td><td>${j.category}</td></tr>
+                <tr><td style="padding:6px 0;font-weight:600;color:var(--navy)">Type</td><td>${j.type.replace('_',' ')}</td></tr>
+                <tr><td style="padding:6px 0;font-weight:600;color:var(--navy)">Location</td><td>${j.location}</td></tr>
+                <tr><td style="padding:6px 0;font-weight:600;color:var(--navy)">Posted</td><td>${formatDate(j.createdAt)}</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>`;
+  } catch(e) {
+    el.innerHTML = `<div class="container section-sm"><div class="empty"><div class="empty-icon">⚠️</div><h3>Job not found</h3><p><a href="jobs.html" class="btn btn-navy btn-sm">Back to Jobs</a></p></div></div>`;
+  }
+}
+
+function applyNow(title, company) {
+  showToast(`Application sent for ${title} at ${company}! We will contact you soon.`, 'success');
+}
+
+loadJob();
+</script>
+</body></html>

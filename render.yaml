@@ -1,26 +1,23 @@
 services:
   - type: web
-    name: smart-employment-api
-    runtime: node
-    region: oregon
-    plan: free
-    rootDir: .
-    buildCommand: pnpm install --frozen-lockfile && pnpm run typecheck:libs && pnpm --filter @workspace/api-server run build
-    startCommand: pnpm --filter @workspace/api-server run start
+    name: smart-employment-backend
+    env: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
     envVars:
-      - key: NODE_ENV
-        value: production
-      - key: PORT
-        value: 10000
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: PYTHON_VERSION
+        value: "3.11.0"
       - key: DATABASE_URL
         fromDatabase:
           name: smart-employment-db
           property: connectionString
-      - key: SESSION_SECRET
-        generateValue: true
+    autoDeploy: true
 
 databases:
   - name: smart-employment-db
-    databaseName: smart_employment
     plan: free
-    region: oregon
+    databaseName: smart_employment
+    user: smart_employment_user

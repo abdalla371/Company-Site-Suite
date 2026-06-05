@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse Jobs - Smart Employment Service</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <h1>Browse <span>Jobs</span></h1>
+    <p>Find your next opportunity from top companies across Somalia</p>
+  </div>
+</div>
+<div class="container section-sm">
+  <div class="search-bar">
+    <input type="text" id="search" placeholder="Search job title, company, keyword...">
+    <select id="filter-type">
+      <option value="">All Types</option>
+      <option value="full_time">Full-time</option>
+      <option value="part_time">Part-time</option>
+      <option value="contract">Contract</option>
+      <option value="internship">Internship</option>
+      <option value="remote">Remote</option>
+    </select>
+    <select id="filter-category">
+      <option value="">All Categories</option>
+      <option value="IT">IT & Technology</option>
+      <option value="Finance">Finance & Banking</option>
+      <option value="Marketing">Marketing</option>
+      <option value="Customer Service">Customer Service</option>
+      <option value="Human Resources">Human Resources</option>
+      <option value="Design">Design</option>
+      <option value="Logistics">Logistics</option>
+      <option value="Healthcare">Healthcare</option>
+    </select>
+    <input type="text" id="filter-location" placeholder="Location...">
+    <button class="btn btn-primary" onclick="doSearch()">Search</button>
+  </div>
+  <div id="jobs-results"><div class="loading"><div class="spinner"></div><p>Loading jobs...</p></div></div>
+</div>
+<script src="config.js"></script><script src="script.js"></script><script src="integration.js"></script>
+<script>
+renderNavbar('jobs'); renderFooter();
+
+async function doSearch() {
+  const el = document.getElementById('jobs-results');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div><p>Searching...</p></div>';
+  try {
+    const data = await jobs.list({
+      search: document.getElementById('search').value.trim(),
+      type: document.getElementById('filter-type').value,
+      category: document.getElementById('filter-category').value,
+      location: document.getElementById('filter-location').value.trim(),
+    });
+    if (!data.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">🔍</div><h3>No jobs found</h3><p>Try different search terms or filters.</p></div>'; return; }
+    el.innerHTML = `<p style="margin-bottom:16px;color:var(--gray-600);font-size:14px">${data.length} jobs found</p><div class="jobs-grid">${data.map(j => `
+      <div class="job-card">
+        <div class="job-card-top">
+          <div class="company-logo-box">${initials(j.companyName)}</div>
+          <div>
+            <div class="job-title"><a href="job-detail.html?id=${j.id}" style="color:inherit">${j.title}</a></div>
+            <div class="job-company">${j.companyName}</div>
+          </div>
+        </div>
+        <div class="job-meta">
+          <span class="job-tag">📍 ${j.location}</span>
+          ${typeBadge(j.type)}
+          <span class="job-tag">📁 ${j.category}</span>
+          ${j.salary ? `<span class="job-tag">💰 ${j.salary}</span>` : ''}
+        </div>
+        <p style="font-size:14px;color:var(--gray-600);line-height:1.6;margin:4px 0">${j.description.substring(0,120)}...</p>
+        <div class="job-card-bottom">
+          <span class="job-date">${formatDate(j.createdAt)}</span>
+          <a href="job-detail.html?id=${j.id}" class="btn btn-navy btn-sm">View & Apply</a>
+        </div>
+      </div>`).join('')}</div>`;
+  } catch(e) { el.innerHTML = `<div class="empty"><div class="empty-icon">⚠️</div><h3>Error loading jobs</h3><p>${e.message}</p></div>`; }
+}
+
+document.getElementById('search').addEventListener('keydown', e => e.key === 'Enter' && doSearch());
+doSearch();
+</script>
+</body></html>

@@ -3,73 +3,88 @@
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Membership Plans - Smart Employment Service</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 <div class="page-hero">
+  <div class="page-hero-dots"></div>
   <div class="page-hero-inner">
-    <h1>⭐ <span>Membership</span> Plans</h1>
+    <h1><span class="gold">Membership</span> Plans</h1>
     <p>Unlock premium features, priority job access, career coaching, and exclusive networking opportunities.</p>
   </div>
 </div>
-<div class="container section-sm">
-  <div id="plans-container"><div class="loading"><div class="spinner"></div><p>Loading plans...</p></div></div>
 
-  <!-- Signup Form (hidden initially) -->
-  <div id="signup-section" style="display:none;max-width:520px;margin:48px auto 0">
-    <div class="form-card">
-      <h1 id="form-plan-title">Join Plan</h1>
-      <p class="subtitle">Complete your membership signup below.</p>
-      <form id="membership-form" onsubmit="handleSignup(event)">
+<div class="section">
+  <div class="container">
+    <div id="plans-grid"><div class="loading"><div class="spinner"></div><p>Loading plans...</p></div></div>
+  </div>
+</div>
+
+<!-- Signup form (shown after selecting a plan) -->
+<div id="signup-wrap" style="display:none;background:var(--muted);padding:0 0 80px">
+  <div class="container" style="max-width:540px;margin:0 auto;padding-top:48px">
+    <div class="form-card" style="max-width:100%">
+      <h1 id="form-title">Join Plan</h1>
+      <p class="form-subtitle">Complete your membership signup below.</p>
+      <div id="plan-info" style="background:var(--muted);border-radius:var(--radius);padding:14px 16px;margin-bottom:20px;font-size:14px;color:var(--muted-fg)"></div>
+      <form onsubmit="handleSignup(event)">
         <input type="hidden" id="plan-id">
-        <div class="form-group"><label>Full Name *</label><input type="text" id="fullName" placeholder="Your full name" required></div>
-        <div class="form-group"><label>Email Address *</label><input type="email" id="email" placeholder="you@example.com" required></div>
-        <div class="form-group"><label>Phone Number *</label><input type="tel" id="phone" placeholder="+252 61 ..." required></div>
-        <div id="plan-summary" style="background:var(--gray-100);border-radius:8px;padding:16px;margin:16px 0;font-size:14px;color:var(--gray-600)"></div>
-        <button type="submit" class="btn btn-primary" id="submit-btn">Complete Signup</button>
-        <button type="button" class="btn btn-navy" style="width:100%;margin-top:8px" onclick="document.getElementById('signup-section').style.display='none'">Cancel</button>
+        <div class="form-group">
+          <label class="form-label">Full Name *</label>
+          <input class="form-input" type="text" id="fullName" placeholder="Your full name" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address *</label>
+          <input class="form-input" type="email" id="email" placeholder="you@example.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone Number *</label>
+          <input class="form-input" type="tel" id="phone" placeholder="+252 61 ..." required>
+        </div>
+        <button type="submit" class="btn btn-primary form-submit" id="submit-btn">Complete Membership Signup</button>
+        <button type="button" class="btn btn-outline form-submit" style="margin-top:8px" onclick="document.getElementById('signup-wrap').style.display='none'">Cancel</button>
       </form>
     </div>
   </div>
 </div>
+
 <script src="config.js"></script><script src="script.js"></script><script src="integration.js"></script>
 <script>
 renderNavbar('membership'); renderFooter();
 let plansData = [];
 
-async function loadPlans() {
-  const el = document.getElementById('plans-container');
+async function load() {
+  const el = document.getElementById('plans-grid');
   try {
     plansData = await memberships.plans();
+    if (!plansData.length) { el.innerHTML = '<div class="empty"><p>No plans available.</p></div>'; return; }
     el.innerHTML = `<div class="plans-grid">${plansData.map(p => `
       <div class="plan-card ${p.isPopular ? 'popular' : ''}">
-        ${p.isPopular ? '<div class="plan-badge">Most Popular</div>' : ''}
+        ${p.isPopular ? '<div class="plan-badge-top">Most Popular</div>' : ''}
         <div class="plan-name">${p.name}</div>
         <div class="plan-price">
-          <span class="amount">$${p.price}</span>
-          <span class="duration"> / ${p.duration}</span>
+          <span class="plan-amount">$${p.price}</span>
+          <span class="plan-duration"> / ${p.duration}</span>
         </div>
-        <ul class="plan-features">${p.features.map(f => `<li>${f}</li>`).join('')}</ul>
-        <button class="btn ${p.isPopular ? 'btn-primary' : 'btn-outline-gold'}" style="width:100%" onclick="selectPlan(${p.id})">
-          Get ${p.name}
-        </button>
-      </div>`).join('')}
-    </div>`;
+        <div class="plan-features">${p.features.map(f => `<div class="plan-feature"><span class="check-icon">✓</span><span>${f}</span></div>`).join('')}</div>
+        <button class="btn ${p.isPopular ? 'btn-secondary' : 'btn-outline'}" style="width:100%" onclick="selectPlan(${p.id})">Get ${p.name}</button>
+      </div>`).join('')}</div>`;
   } catch(e) {
-    el.innerHTML = '<div class="empty"><div class="empty-icon">⚠️</div><h3>Could not load plans</h3><p>Please refresh the page.</p></div>';
+    el.innerHTML = `<div class="empty"><p>Could not load plans. Please try again.</p></div>`;
   }
 }
 
 function selectPlan(planId) {
-  const plan = plansData.find(p => p.id === planId);
-  if (!plan) return;
+  const p = plansData.find(x => x.id === planId);
+  if (!p) return;
   document.getElementById('plan-id').value = planId;
-  document.getElementById('form-plan-title').textContent = `Join ${plan.name} Plan`;
-  document.getElementById('plan-summary').innerHTML = `<strong>${plan.name} Plan</strong> — $${plan.price} / ${plan.duration}`;
-  const sec = document.getElementById('signup-section');
-  sec.style.display = 'block';
-  sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.getElementById('form-title').textContent = `Join ${p.name} Plan`;
+  document.getElementById('plan-info').innerHTML = `<strong>${p.name} Plan</strong> — $${p.price} / ${p.duration}`;
+  const wrap = document.getElementById('signup-wrap');
+  wrap.style.display = 'block';
+  wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 async function handleSignup(e) {
@@ -83,19 +98,21 @@ async function handleSignup(e) {
       email: document.getElementById('email').value,
       phone: document.getElementById('phone').value,
     });
-    document.getElementById('membership-form').innerHTML = `
-      <div style="text-align:center;padding:32px 0">
-        <div style="font-size:56px;margin-bottom:16px">🌟</div>
-        <h2 style="color:var(--navy);margin-bottom:12px">Welcome to Smart Employment!</h2>
-        <p style="color:var(--gray-600);margin-bottom:24px">Your membership is confirmed. Our team will contact you with login details and your welcome package.</p>
-        <a href="index.html" class="btn btn-primary">Go to Homepage</a>
+    document.getElementById('signup-wrap').innerHTML = `
+      <div class="container" style="max-width:540px;margin:0 auto;padding:48px 32px">
+        <div class="form-card success-card" style="max-width:100%">
+          <div style="font-size:52px">🌟</div>
+          <h2>Welcome to Smart Employment!</h2>
+          <p>Your membership is confirmed. Our team will contact you with your welcome package shortly.</p>
+          <a href="index.html" class="btn btn-primary">Go to Homepage</a>
+        </div>
       </div>`;
   } catch(err) {
     showToast(err.message || 'Signup failed. Please try again.', 'error');
-    btn.disabled = false; btn.textContent = 'Complete Signup';
+    btn.disabled = false; btn.textContent = 'Complete Membership Signup';
   }
 }
-
-loadPlans();
+load();
 </script>
-</body></html>
+</body>
+</html>

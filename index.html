@@ -1,92 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Smart Employment Service - Somalia's Premier Job Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
+
+<!-- HERO -->
 <section class="hero">
+  <div class="hero-dots"></div>
   <div class="hero-inner">
-    <div class="hero-tag">Somalia's #1 Employment Platform</div>
-    <h1>Somalia's Premier<br><span>Employment Platform</span></h1>
-    <p>BARO, TIJAABI, SHAQO HEL. Connecting ambitious talent with top companies across Somalia.</p>
+    <h1>Somalia's Premier <span class="gold">Employment</span> Platform</h1>
+    <p class="hero-sub">BARO, TIJAABI, SHAQO HEL. We connect ambitious talent with top companies.</p>
     <div class="hero-btns">
-      <a href="jobs.html" class="btn btn-primary btn-lg">Find a Job</a>
-      <a href="post-job.html" class="btn btn-secondary btn-lg">Post a Job</a>
+      <a href="jobs.html" class="btn btn-secondary btn-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        Find a Job
+      </a>
+      <a href="post-job.html" class="btn btn-outline-white btn-lg">Post a Job</a>
     </div>
-    <div class="hero-stats" id="hero-stats">
-      <div class="stat-item"><span class="stat-num">—</span><span class="stat-label">Active Jobs</span></div>
-      <div class="stat-item"><span class="stat-num">—</span><span class="stat-label">Companies</span></div>
-      <div class="stat-item"><span class="stat-num">—</span><span class="stat-label">Members</span></div>
-      <div class="stat-item"><span class="stat-num">—</span><span class="stat-label">Applications</span></div>
+    <div class="hero-tags">
+      <span class="hero-tag-item">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--secondary)"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        Direct Employer Access
+      </span>
+      <span class="hero-tag-item">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--secondary)"><path d="m22 9-10-5L2 9l10 5 10-5z"/><path d="M6 11.54V18a4 4 0 0 0 4 4h4a4 4 0 0 0 4-4v-6.46"/><path d="M22 9v6"/></svg>
+        Student Opportunities
+      </span>
     </div>
   </div>
 </section>
 
-<div class="container">
-  <!-- Featured Jobs -->
-  <section class="section-sm">
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-grid" id="stats-grid">
+    <div class="stat-item"><span class="stat-num">—</span><span class="stat-label">Active Jobs</span></div>
+    <div class="stat-item"><span class="stat-num">—</span><span class="stat-label">Companies</span></div>
+    <div class="stat-item"><span class="stat-num">—</span><span class="stat-label">Members</span></div>
+    <div class="stat-item"><span class="stat-num">—</span><span class="stat-label">Applications</span></div>
+  </div>
+</div>
+
+<!-- FEATURED JOBS -->
+<div class="section">
+  <div class="container">
     <div class="section-header">
-      <h2>Featured Jobs</h2>
-      <a href="jobs.html" class="view-all">View all jobs →</a>
+      <div class="section-header-left">
+        <h2>Featured Opportunities</h2>
+        <p>Hand-picked roles from top employers</p>
+      </div>
+      <a href="jobs.html" class="view-all-btn">
+        View all jobs
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </a>
     </div>
     <div id="featured-jobs"><div class="loading"><div class="spinner"></div><p>Loading jobs...</p></div></div>
-  </section>
+    <a href="jobs.html" class="btn btn-outline" id="view-all-mobile" style="width:100%;margin-top:24px;display:none;justify-content:center">View all jobs</a>
+  </div>
+</div>
 
-  <!-- Top Companies -->
-  <section class="section-sm">
-    <div class="section-header">
-      <h2>Top Companies Hiring</h2>
-      <a href="jobs.html" class="view-all">Browse all →</a>
+<!-- PROGRAMS (navy bg) -->
+<div class="section-primary">
+  <div class="container">
+    <div class="programs-intro">
+      <h2>More Than Just Jobs</h2>
+      <p>We offer dedicated programs to help you learn, experience, and land your dream role.</p>
     </div>
-    <div id="companies-grid" class="companies-grid"><div class="loading"><div class="spinner"></div></div></div>
-  </section>
-
-  <!-- Programs -->
-  <section class="section-sm">
-    <div class="section-header"><h2>Our Programs</h2></div>
     <div class="programs-grid">
       <div class="program-card">
-        <div class="program-icon">🎓</div>
+        <div class="program-icon-box">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 9-10-5L2 9l10 5 10-5z"/><path d="M6 11.54V18a4 4 0 0 0 4 4h4a4 4 0 0 0 4-4v-6.46"/><path d="M22 9v6"/></svg>
+        </div>
         <h3>Internship Program</h3>
-        <p>Gain real work experience, build your skills, and strengthen your CV with a structured internship.</p>
-        <a href="internship.html" class="program-link">Learn more →</a>
+        <p>Start your career with structured internships at leading Somali companies. Perfect for recent graduates.</p>
+        <a href="internship.html" class="program-link">Learn more <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></a>
       </div>
       <div class="program-card">
-        <div class="program-icon">💼</div>
-        <h3>Shaqo-Tag Program</h3>
-        <p>Short-term work attachment that gives you hands-on experience in your chosen sector.</p>
-        <a href="shaqotag.html" class="program-link">Learn more →</a>
+        <div class="program-icon-box">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        </div>
+        <h3>Shaqo-Tag</h3>
+        <p>Work attachment program designed to give you practical, hands-on experience in your specific field of study.</p>
+        <a href="shaqotag.html" class="program-link">Learn more <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></a>
       </div>
       <div class="program-card">
-        <div class="program-icon">📋</div>
-        <h3>HR Policy Program</h3>
-        <p>We help companies build fair, transparent HR policies for a productive and trusted workplace.</p>
-        <a href="about.html" class="program-link">Learn more →</a>
-      </div>
-      <div class="program-card">
-        <div class="program-icon">⭐</div>
-        <h3>Membership</h3>
-        <p>Exclusive membership with priority access, career coaching, networking, and more.</p>
-        <a href="membership.html" class="program-link">View plans →</a>
+        <div class="program-icon-box">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3>Membership Plans</h3>
+        <p>For employers: Premium plans with HR policy consulting, dedicated account management, and featured listings.</p>
+        <a href="membership.html" class="program-link">View plans <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></a>
       </div>
     </div>
-  </section>
+  </div>
+</div>
 
-  <!-- CTA -->
-  <section class="section-sm text-center" style="padding-bottom:80px">
-    <div style="background:linear-gradient(135deg,var(--navy),var(--navy-mid));border-radius:20px;padding:60px 40px;color:white;">
-      <h2 style="font-size:32px;font-weight:800;margin-bottom:16px;">Ready to start your career journey?</h2>
-      <p style="color:rgba(255,255,255,0.75);font-size:17px;max-width:520px;margin:0 auto 32px;">Join thousands of Somalis who found their dream job through Smart Employment Service.</p>
-      <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
-        <a href="create-account.html" class="btn btn-primary btn-lg">Create Free Account</a>
-        <a href="about.html" class="btn btn-secondary btn-lg">Learn About Us</a>
-      </div>
+<!-- TOP COMPANIES (muted bg) -->
+<div class="section-muted">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:48px">
+      <h2 style="font-size:28px;font-weight:700;letter-spacing:-0.02em;margin-bottom:12px">Top Hiring Companies</h2>
+      <p style="font-size:16px;color:var(--muted-fg)">Join the best teams in Somalia</p>
     </div>
-  </section>
+    <div id="companies-grid" class="companies-grid"><div class="loading"><div class="spinner"></div></div></div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="section section-border-t" style="text-align:center">
+  <div class="container">
+    <h2 style="font-size:36px;font-weight:700;letter-spacing:-0.02em;margin-bottom:20px">Ready to take the next step?</h2>
+    <p style="font-size:18px;color:var(--muted-fg);max-width:640px;margin:0 auto 40px;line-height:1.7">Whether you're looking for your dream job or searching for the perfect candidate, Smart Employment Service is here to help.</p>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+      <a href="create-account.html" class="btn btn-primary" style="height:48px;padding:0 32px;font-size:15px">Create an Account</a>
+      <a href="jobs.html" class="btn btn-outline" style="height:48px;padding:0 32px;font-size:15px">Browse Jobs</a>
+    </div>
+  </div>
 </div>
 
 <script src="config.js"></script>
@@ -98,59 +131,44 @@ renderFooter();
 
 async function loadStats() {
   try {
-    const data = await stats.summary();
-    const el = document.getElementById('hero-stats');
-    el.innerHTML = `
-      <div class="stat-item"><span class="stat-num">${data.totalJobs}+</span><span class="stat-label">Active Jobs</span></div>
-      <div class="stat-item"><span class="stat-num">${data.totalCompanies}+</span><span class="stat-label">Companies</span></div>
-      <div class="stat-item"><span class="stat-num">${data.totalMembers}+</span><span class="stat-label">Members</span></div>
-      <div class="stat-item"><span class="stat-num">${data.totalApplications}+</span><span class="stat-label">Applications</span></div>`;
+    const d = await stats.summary();
+    document.getElementById('stats-grid').innerHTML = `
+      <div class="stat-item"><span class="stat-num">${d.totalJobs}+</span><span class="stat-label">Active Jobs</span></div>
+      <div class="stat-item"><span class="stat-num">${d.totalCompanies}+</span><span class="stat-label">Companies</span></div>
+      <div class="stat-item"><span class="stat-num">${d.totalMembers}+</span><span class="stat-label">Members</span></div>
+      <div class="stat-item"><span class="stat-num">${d.totalApplications}+</span><span class="stat-label">Applications</span></div>`;
   } catch(e) {}
 }
 
-async function loadFeaturedJobs() {
+async function loadFeatured() {
   const el = document.getElementById('featured-jobs');
   try {
     const data = await jobs.featured();
-    if (!data.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">📋</div><h3>No jobs yet</h3><p>Check back soon!</p></div>'; return; }
-    el.innerHTML = `<div class="jobs-grid">${data.map(j => `
-      <div class="job-card">
-        <div class="job-card-top">
-          <div class="company-logo-box">${initials(j.companyName)}</div>
-          <div>
-            <div class="job-title"><a href="job-detail.html?id=${j.id}" style="color:inherit">${j.title}</a></div>
-            <div class="job-company">${j.companyName}</div>
-          </div>
-        </div>
-        <div class="job-meta">
-          <span class="job-tag">📍 ${j.location}</span>
-          ${typeBadge(j.type)}
-          ${j.salary ? `<span class="job-tag">💰 ${j.salary}</span>` : ''}
-        </div>
-        <div class="job-card-bottom">
-          <span class="job-date">${formatDate(j.createdAt)}</span>
-          <a href="job-detail.html?id=${j.id}" class="btn btn-navy btn-sm">Apply</a>
-        </div>
-      </div>`).join('')}</div>`;
-  } catch(e) { el.innerHTML = '<p style="color:var(--gray-600)">Could not load jobs.</p>'; }
+    if (!data.length) {
+      el.innerHTML = '<div class="empty"><p>No featured jobs available at the moment.</p></div>';
+      return;
+    }
+    el.innerHTML = `<div class="jobs-grid">${data.map(j => jobCardHTML(j)).join('')}</div>`;
+    document.getElementById('view-all-mobile').style.display = 'flex';
+  } catch(e) {
+    el.innerHTML = `<div class="empty"><p>Could not load jobs. The backend may still be starting up — please refresh.</p></div>`;
+  }
 }
 
 async function loadCompanies() {
   const el = document.getElementById('companies-grid');
   try {
     const data = await companies.list();
-    if (!data.length) { el.innerHTML = '<p>No companies yet.</p>'; return; }
-    el.innerHTML = data.map(c => `
-      <div class="company-card">
-        <div class="company-icon">${initials(c.name)}</div>
-        <div class="company-name">${c.name}</div>
-        <div class="company-positions">${c.openPositions} open positions</div>
-        <div style="font-size:12px;color:var(--gray-400);margin-top:4px">${c.industry || ''}</div>
-      </div>`).join('');
-  } catch(e) { el.innerHTML = '<p>Could not load companies.</p>'; }
+    if (!data.length) { el.innerHTML = '<div class="empty"><p>Company data unavailable.</p></div>'; return; }
+    el.innerHTML = data.map(c => companyCardHTML(c)).join('');
+  } catch(e) {
+    el.innerHTML = '<div class="empty"><p>Could not load companies.</p></div>';
+  }
 }
 
-loadStats(); loadFeaturedJobs(); loadCompanies();
+loadStats();
+loadFeatured();
+loadCompanies();
 </script>
 </body>
 </html>

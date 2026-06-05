@@ -3,46 +3,71 @@
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Apply for Shaqo-Tag - Smart Employment Service</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 <div class="form-page">
-  <div class="form-card" style="max-width:680px">
-    <h1>💼 Shaqo-Tag Application</h1>
-    <p class="subtitle">Apply for a short-term work attachment in your preferred sector.</p>
-    <form id="shaqotag-form" onsubmit="handleSubmit(event)">
-      <div class="form-row">
-        <div class="form-group"><label>Full Name *</label><input type="text" id="fullName" placeholder="Your full name" required></div>
-        <div class="form-group"><label>Phone Number</label><input type="tel" id="phone" placeholder="+252 61 ..."></div>
-      </div>
-      <div class="form-group"><label>Email Address *</label><input type="email" id="email" placeholder="you@example.com" required></div>
-      <div class="form-row">
-        <div class="form-group"><label>Current Occupation *</label><input type="text" id="occupation" placeholder="e.g. Accountant, Student..." required></div>
-        <div class="form-group">
-          <label>Preferred Sector</label>
-          <select id="preferredSector">
-            <option value="">Select sector...</option>
-            <option>Banking & Finance</option><option>Telecommunications & IT</option>
-            <option>Healthcare</option><option>Education</option><option>Logistics</option>
-            <option>Government & Public Sector</option><option>Media & Communications</option>
-            <option>Other</option>
-          </select>
+  <div class="form-card" style="max-width:640px">
+    <h1>Shaqo-Tag Application</h1>
+    <p class="form-subtitle">Apply for a short-term work attachment in your preferred sector.</p>
+    <div id="form-area">
+      <form onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Full Name *</label>
+            <input class="form-input" type="text" id="fullName" placeholder="Your full name" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone Number</label>
+            <input class="form-input" type="tel" id="phone" placeholder="+252 61 ...">
+          </div>
         </div>
-      </div>
-      <div class="form-group"><label>Work Experience *</label><textarea id="experience" rows="4" placeholder="Describe your work experience, even if limited or informal..." required></textarea></div>
-      <div class="form-group"><label>Key Skills</label><input type="text" id="skills" placeholder="e.g. MS Office, Customer service, Driving license..."></div>
-      <div class="form-group"><label>CV / Portfolio Link (optional)</label><input type="url" id="cvUrl" placeholder="https://..."></div>
-      <div class="form-group"><label>Why do you want to join Shaqo-Tag?</label><textarea id="coverLetter" rows="4" placeholder="Tell us your motivation and goals..."></textarea></div>
-      <button type="submit" class="btn btn-primary" id="submit-btn">Submit Application</button>
-    </form>
-    <div class="form-footer"><a href="shaqotag.html">← Back to Shaqo-Tag Program</a></div>
+        <div class="form-group">
+          <label class="form-label">Email Address *</label>
+          <input class="form-input" type="email" id="email" placeholder="you@example.com" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Current Occupation *</label>
+            <input class="form-input" type="text" id="occupation" placeholder="e.g. Accountant, Student..." required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Preferred Sector</label>
+            <select class="form-select" id="preferredSector">
+              <option value="">Select sector...</option>
+              <option>Banking &amp; Finance</option><option>Telecommunications &amp; IT</option>
+              <option>Healthcare</option><option>Education</option><option>Logistics</option>
+              <option>Government &amp; Public Sector</option><option>Media &amp; Communications</option><option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Work Experience *</label>
+          <textarea class="form-textarea" id="experience" rows="4" placeholder="Describe your work experience, even if limited or informal..." required></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Key Skills</label>
+          <input class="form-input" type="text" id="skills" placeholder="e.g. MS Office, Customer service, Driving license...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">CV / Portfolio Link (optional)</label>
+          <input class="form-input" type="url" id="cvUrl" placeholder="https://...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Why do you want to join Shaqo-Tag?</label>
+          <textarea class="form-textarea" id="coverLetter" rows="4" placeholder="Tell us your motivation and what you hope to achieve..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary form-submit" id="submit-btn">Submit Application</button>
+      </form>
+      <p class="form-footer-text"><a href="shaqotag.html">← Back to Shaqo-Tag Program</a></p>
+    </div>
   </div>
 </div>
 <script src="config.js"></script><script src="script.js"></script><script src="integration.js"></script>
 <script>
 renderNavbar('shaqotag');
-
 async function handleSubmit(e) {
   e.preventDefault();
   const btn = document.getElementById('submit-btn');
@@ -59,12 +84,12 @@ async function handleSubmit(e) {
       cvUrl: document.getElementById('cvUrl').value,
       coverLetter: document.getElementById('coverLetter').value,
     });
-    document.getElementById('shaqotag-form').innerHTML = `
-      <div style="text-align:center;padding:40px 0">
-        <div style="font-size:56px;margin-bottom:16px">🎉</div>
-        <h2 style="color:var(--navy);margin-bottom:12px">Application Submitted!</h2>
-        <p style="color:var(--gray-600);margin-bottom:24px">Thank you for applying to Shaqo-Tag! We will be in touch within 5 business days.</p>
-        <a href="shaqotag.html" class="btn btn-navy">Back to Shaqo-Tag</a>
+    document.getElementById('form-area').innerHTML = `
+      <div class="success-card">
+        <div style="font-size:52px">🎉</div>
+        <h2>Application Submitted!</h2>
+        <p>Thank you for applying to Shaqo-Tag! We will be in touch within 5 business days.</p>
+        <a href="shaqotag.html" class="btn btn-primary">Back to Shaqo-Tag</a>
       </div>`;
   } catch(err) {
     showToast(err.message || 'Submission failed. Please try again.', 'error');
@@ -72,4 +97,5 @@ async function handleSubmit(e) {
   }
 }
 </script>
-</body></html>
+</body>
+</html>

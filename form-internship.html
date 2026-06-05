@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apply for Internship - Smart Employment Service</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="form-page">
+  <div class="form-card" style="max-width:680px">
+    <h1>🎓 Internship Application</h1>
+    <p class="subtitle">Complete the form below to apply for our structured internship program.</p>
+    <form id="internship-form" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="form-group"><label>Full Name *</label><input type="text" id="fullName" placeholder="Your full name" required></div>
+        <div class="form-group"><label>Phone Number</label><input type="tel" id="phone" placeholder="+252 61 ..."></div>
+      </div>
+      <div class="form-group"><label>Email Address *</label><input type="email" id="email" placeholder="you@example.com" required></div>
+      <div class="form-row">
+        <div class="form-group"><label>University / Institution *</label><input type="text" id="university" placeholder="University name" required></div>
+        <div class="form-group"><label>Field of Study *</label><input type="text" id="fieldOfStudy" placeholder="e.g. Computer Science" required></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Year of Study</label>
+          <select id="yearOfStudy">
+            <option value="">Select year...</option>
+            <option>1st Year</option><option>2nd Year</option><option>3rd Year</option>
+            <option>4th Year</option><option>5th Year</option><option>Graduate</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Available Start Date *</label><input type="date" id="startDate" required></div>
+      </div>
+      <div class="form-group"><label>CV / Portfolio Link (Google Drive, LinkedIn, etc.)</label><input type="url" id="cvUrl" placeholder="https://..."></div>
+      <div class="form-group"><label>Cover Letter</label><textarea id="coverLetter" rows="5" placeholder="Tell us about yourself, your goals, and why you want to join this program..."></textarea></div>
+      <button type="submit" class="btn btn-primary" id="submit-btn">Submit Application</button>
+    </form>
+    <div class="form-footer"><a href="internship.html">← Back to Internship Program</a></div>
+  </div>
+</div>
+<script src="config.js"></script><script src="script.js"></script><script src="integration.js"></script>
+<script>
+renderNavbar('internship');
+
+async function handleSubmit(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true; btn.textContent = 'Submitting...';
+  try {
+    await applications.createInternship({
+      fullName: document.getElementById('fullName').value,
+      email: document.getElementById('email').value,
+      phone: document.getElementById('phone').value,
+      university: document.getElementById('university').value,
+      fieldOfStudy: document.getElementById('fieldOfStudy').value,
+      yearOfStudy: document.getElementById('yearOfStudy').value,
+      startDate: document.getElementById('startDate').value,
+      cvUrl: document.getElementById('cvUrl').value,
+      coverLetter: document.getElementById('coverLetter').value,
+    });
+    document.getElementById('internship-form').innerHTML = `
+      <div style="text-align:center;padding:40px 0">
+        <div style="font-size:56px;margin-bottom:16px">🎉</div>
+        <h2 style="color:var(--navy);margin-bottom:12px">Application Submitted!</h2>
+        <p style="color:var(--gray-600);margin-bottom:24px">Thank you! We will review your application and contact you within 5–7 business days.</p>
+        <a href="internship.html" class="btn btn-navy">Back to Internship Program</a>
+      </div>`;
+  } catch(err) {
+    showToast(err.message || 'Submission failed. Please try again.', 'error');
+    btn.disabled = false; btn.textContent = 'Submit Application';
+  }
+}
+</script>
+</body></html>

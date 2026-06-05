@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Membership Plans - Smart Employment Service</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <h1>⭐ <span>Membership</span> Plans</h1>
+    <p>Unlock premium features, priority job access, career coaching, and exclusive networking opportunities.</p>
+  </div>
+</div>
+<div class="container section-sm">
+  <div id="plans-container"><div class="loading"><div class="spinner"></div><p>Loading plans...</p></div></div>
+
+  <!-- Signup Form (hidden initially) -->
+  <div id="signup-section" style="display:none;max-width:520px;margin:48px auto 0">
+    <div class="form-card">
+      <h1 id="form-plan-title">Join Plan</h1>
+      <p class="subtitle">Complete your membership signup below.</p>
+      <form id="membership-form" onsubmit="handleSignup(event)">
+        <input type="hidden" id="plan-id">
+        <div class="form-group"><label>Full Name *</label><input type="text" id="fullName" placeholder="Your full name" required></div>
+        <div class="form-group"><label>Email Address *</label><input type="email" id="email" placeholder="you@example.com" required></div>
+        <div class="form-group"><label>Phone Number *</label><input type="tel" id="phone" placeholder="+252 61 ..." required></div>
+        <div id="plan-summary" style="background:var(--gray-100);border-radius:8px;padding:16px;margin:16px 0;font-size:14px;color:var(--gray-600)"></div>
+        <button type="submit" class="btn btn-primary" id="submit-btn">Complete Signup</button>
+        <button type="button" class="btn btn-navy" style="width:100%;margin-top:8px" onclick="document.getElementById('signup-section').style.display='none'">Cancel</button>
+      </form>
+    </div>
+  </div>
+</div>
+<script src="config.js"></script><script src="script.js"></script><script src="integration.js"></script>
+<script>
+renderNavbar('membership'); renderFooter();
+let plansData = [];
+
+async function loadPlans() {
+  const el = document.getElementById('plans-container');
+  try {
+    plansData = await memberships.plans();
+    el.innerHTML = `<div class="plans-grid">${plansData.map(p => `
+      <div class="plan-card ${p.isPopular ? 'popular' : ''}">
+        ${p.isPopular ? '<div class="plan-badge">Most Popular</div>' : ''}
+        <div class="plan-name">${p.name}</div>
+        <div class="plan-price">
+          <span class="amount">$${p.price}</span>
+          <span class="duration"> / ${p.duration}</span>
+        </div>
+        <ul class="plan-features">${p.features.map(f => `<li>${f}</li>`).join('')}</ul>
+        <button class="btn ${p.isPopular ? 'btn-primary' : 'btn-outline-gold'}" style="width:100%" onclick="selectPlan(${p.id})">
+          Get ${p.name}
+        </button>
+      </div>`).join('')}
+    </div>`;
+  } catch(e) {
+    el.innerHTML = '<div class="empty"><div class="empty-icon">⚠️</div><h3>Could not load plans</h3><p>Please refresh the page.</p></div>';
+  }
+}
+
+function selectPlan(planId) {
+  const plan = plansData.find(p => p.id === planId);
+  if (!plan) return;
+  document.getElementById('plan-id').value = planId;
+  document.getElementById('form-plan-title').textContent = `Join ${plan.name} Plan`;
+  document.getElementById('plan-summary').innerHTML = `<strong>${plan.name} Plan</strong> — $${plan.price} / ${plan.duration}`;
+  const sec = document.getElementById('signup-section');
+  sec.style.display = 'block';
+  sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+async function handleSignup(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true; btn.textContent = 'Processing...';
+  try {
+    await memberships.create({
+      planId: parseInt(document.getElementById('plan-id').value),
+      fullName: document.getElementById('fullName').value,
+      email: document.getElementById('email').value,
+      phone: document.getElementById('phone').value,
+    });
+    document.getElementById('membership-form').innerHTML = `
+      <div style="text-align:center;padding:32px 0">
+        <div style="font-size:56px;margin-bottom:16px">🌟</div>
+        <h2 style="color:var(--navy);margin-bottom:12px">Welcome to Smart Employment!</h2>
+        <p style="color:var(--gray-600);margin-bottom:24px">Your membership is confirmed. Our team will contact you with login details and your welcome package.</p>
+        <a href="index.html" class="btn btn-primary">Go to Homepage</a>
+      </div>`;
+  } catch(err) {
+    showToast(err.message || 'Signup failed. Please try again.', 'error');
+    btn.disabled = false; btn.textContent = 'Complete Signup';
+  }
+}
+
+loadPlans();
+</script>
+</body></html>
